@@ -127,6 +127,9 @@ const store = createStore({
           if (user.username || user.email) {
             commit('setDisplayName', user.username || user.email);
           }
+        } else if (response.status === 401) {
+          // Токен протух/невалиден — разлогиниваем, чтобы выкинуть на страницу входа
+          commit('logout');
         }
       } catch (error) {
         console.error('GetUser error:', error);
@@ -160,6 +163,8 @@ const store = createStore({
           const ratings = data.ratings || [];
           commit('setRating', ratings);
           commit('setPage', data.page || {});
+        } else if (response.status === 401) {
+          commit('logout');
         } else {
           console.error('❌ Ошибка загрузки:', response.status);
         }
